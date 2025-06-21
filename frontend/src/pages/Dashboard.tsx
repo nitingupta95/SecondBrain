@@ -87,9 +87,9 @@ function Dashboard() {
         `${BACKEND_URL}/api/v1/content`,
         { id, title, link, type },
         {
-          headers: {
-            token: `${token}`,
-          },
+         headers: {
+           token: `${token}`,
+         },
         }
       );
 
@@ -125,7 +125,7 @@ function Dashboard() {
                   <Input
                     id="id"
                     value={id}
-                    onChange={(e) => setId(e.target.value)}
+                    onChange={(e) => setId(Number(e.target.value))}
                     placeholder="Enter id"
                   />
                 </div>

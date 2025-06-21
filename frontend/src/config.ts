@@ -1,1 +1,1 @@
-export const BACKEND_URL= "https://second-brain-api-nine.vercel.app"
+export const BACKEND_URL= "http://localhost:3000"

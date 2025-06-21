@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { BACKEND_URL } from '@/config';
 import { Button } from "@/components/ui/button";
+import UseContent from '../hooks/UseContent'
 import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
@@ -72,14 +73,13 @@ function Card({ id, title, link, type }: cardProps) {
 
     try {
       await axios.delete(`${BACKEND_URL}/api/v1/content/${id}`, {
-        data: { id },
         headers: { token },
       });
       toast.success("Content deleted successfully!", {
         className: "bg-green-100 border border-green-400 text-green-800 font-semibold",
       });
       setOpen(false);
-      window.location.reload();
+      navigate("/");
     } catch {
       toast.error("Failed to delete content");
     }
