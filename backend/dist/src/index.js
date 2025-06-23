@@ -48,12 +48,9 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var cors_1 = __importDefault(require("cors"));
 var crypto_1 = __importDefault(require("crypto"));
 var db_1 = require("./db");
-var JWT_SECRET = process.env.JWT_SECRET || "your_secure_secret";
-var MONGO_URI = process.env.MONGO_URI || "mongodb+srv://ng61315:xvR6Q3iyKZiz7tMN@cluster0.fantk.mongodb.net/SecondBrainn";
-console.log("🔍 Connecting to:", MONGO_URI);
-mongoose_1.default.connect(MONGO_URI)
-    .then(function () { return console.log("✅ MongoDB connected"); })
-    .catch(function (err) { return console.error("❌ Connection failed:", err.message); });
+var JWT_SECRET = process.env.JWT_SECRET;
+var MONGO_URI = process.env.MONGO_URI;
+mongoose_1.default.connect(MONGO_URI).then(function () { return console.log("✅ MongoDB connected"); }).catch(function (err) { return console.error("❌ Connection failed:", err.message); });
 mongoose_1.default.connection.on('connected', function () { return console.log('Mongoose connected'); });
 mongoose_1.default.connection.on('error', function (err) { return console.error('Mongoose connection error:', err); });
 mongoose_1.default.connection.on('disconnected', function () { return console.log('Mongoose disconnected'); });
@@ -61,14 +58,13 @@ var app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 var corsOptions = {
-    origin: "https://second-brain-app-frontend.vercel.app",
+    origin: "https://second-brain-woad-two.vercel.app",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'token']
 };
 app.use((0, cors_1.default)(corsOptions));
 app.options('*', (0, cors_1.default)(corsOptions));
-// ✅ Auth middleware
 function auth(req, res, next) {
     var token = req.headers['token'];
     if (!token) {
@@ -84,7 +80,6 @@ function auth(req, res, next) {
         res.status(401).json({ message: "Invalid token" });
     }
 }
-// ✅ Signup
 app.post('/api/v1/signup', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, name_1, email, password, existingUser, hashedPassword, user, token, err_1;
     return __generator(this, function (_b) {
@@ -164,7 +159,7 @@ app.get('/api/v1/content', auth, function (req, res) { return __awaiter(void 0, 
                 return [3 /*break*/, 3];
             case 2:
                 err_3 = _a.sent();
-                res.status(500).json({ message: 'Failed to fetch content', error: err_3.message || err_3 });
+                res.status(500).json({ message: 'Failed to fetch content', erroe: err_3.message || err_3 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -178,7 +173,13 @@ app.post('/api/v1/content', auth, function (req, res) { return __awaiter(void 0,
             case 0:
                 _b.trys.push([0, 2, , 3]);
                 _a = req.body, id = _a.id, type = _a.type, link = _a.link, title = _a.title;
-                return [4 /*yield*/, db_1.ContentModel.create({ id: id, type: type, link: link, title: title, userId: req.userId })];
+                return [4 /*yield*/, db_1.ContentModel.create({
+                        id: id,
+                        type: type,
+                        link: link,
+                        title: title,
+                        userId: req.userId
+                    })];
             case 1:
                 content = _b.sent();
                 res.status(201).json({ message: 'Content saved', content: content });
@@ -220,7 +221,6 @@ app.delete("/api/v1/content/:id", auth, function (req, res) { return __awaiter(v
         }
     });
 }); });
-// ✅ Share content
 app.post("/api/v1/brain/share", auth, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var share, existingLink, hash, err_6;
     return __generator(this, function (_a) {
