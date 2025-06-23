@@ -9,7 +9,7 @@ import crypto from 'crypto';
 import { ContentModel, UserModel, LinkModel } from './db';
 
  
-const JWT_SECRET = process.env.JWT_SECRET || "your_secure_secret";
+const JWT_SECRET = process.env.JWT_SECRET!;
  
 const MONGO_URI = process.env.MONGO_URI !;
  
