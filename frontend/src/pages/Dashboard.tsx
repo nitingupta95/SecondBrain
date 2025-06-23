@@ -1,12 +1,11 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as React from 'react';
-
 import Sidebar from '../component/Sidebar';
- 
 import Card from '../component/Card';
 import UseContent from '../hooks/UseContent';
 import { toast, Toaster } from "sonner";
 import { useNavigate } from 'react-router-dom';
+
 import {
   Dialog,
   DialogContent,
@@ -17,6 +16,7 @@ import {
   DialogOverlay,
   DialogTitle
 } from '../components/ui/dialog';
+
 import {
   Select,
   SelectContent,
@@ -33,16 +33,17 @@ import PlusIcon from '../icons/PlusIcon';
 import { BACKEND_URL } from '@/config';
 import axios from 'axios';
 
-// ✅ Added `id` to the ContentItem interface
 interface ContentItem {
   id: number;
   title: string;
   link: string;
   type: 'link' | 'tweet' | 'youtube' | 'document';
 }
+
 const isValidType = (t: string): t is ContentType => {
   return ["document", "link", "tweet", "youtube"].includes(t);
 };
+
 type ContentType = "document" | "link" | "tweet" | "youtube";
 
 function Dashboard() {
@@ -52,7 +53,7 @@ function Dashboard() {
   };
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [id, setId] = useState<string>('');
+  const [id, setId] = useState<string>(''); // ✅ keep id as string
   const [title, setTitle] = useState<string>('');
   const [link, setLink] = useState<string>('');
   const [type, setType] = useState<string>('');
@@ -71,7 +72,7 @@ function Dashboard() {
   };
 
   const handleSaveContent = async () => {
-    if (!title || !link || !type) {
+    if (!title || !link || !type || !id) {
       toast.error('Please fill in all fields');
       return;
     }
@@ -85,17 +86,23 @@ function Dashboard() {
 
       await axios.post(
         `${BACKEND_URL}/api/v1/content`,
-        { id, title, link, type },
         {
-         headers: {
-           token: `${token}`,
-         },
+          id: Number(id), // ✅ convert to number here
+          title,
+          link,
+          type,
+        },
+        {
+          headers: {
+            token: `${token}`,
+          },
         }
       );
 
       toast.success('Content saved successfully!', {
         className: "bg-green-100 border border-green-400 text-green-800 font-semibold",
       });
+
       setModalOpen(false);
       refresh();
     } catch (error) {
@@ -125,7 +132,7 @@ function Dashboard() {
                   <Input
                     id="id"
                     value={id}
-                    onChange={(e) => setId(Number(e.target.value))}
+                    onChange={(e) => setId(e.target.value)} // ✅ keep as string
                     placeholder="Enter id"
                   />
                 </div>
@@ -197,11 +204,10 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {contents.map(({ id, type, link, title }) =>
-          isValidType(type) ? (
-            <Card key={id} id={id} link={link} title={title} type={type} />
-          ) : null
-        )}
-
+            isValidType(type) ? (
+              <Card key={id} id={id} link={link} title={title} type={type} />
+            ) : null
+          )}
         </div>
       </div>
     </div>
