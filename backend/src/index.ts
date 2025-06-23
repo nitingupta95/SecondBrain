@@ -10,24 +10,24 @@ import { ContentModel, UserModel, LinkModel } from './db';
 
  
 const JWT_SECRET = process.env.JWT_SECRET || "your_secure_secret";
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://ng61315:xvR6Q3iyKZiz7tMN@cluster0.fantk.mongodb.net/SecondBrainn";
+ 
+const MONGO_URI = process.env.MONGO_URI !;
+ 
 
-console.log("🔍 Connecting to:", MONGO_URI);
-
-mongoose.connect(MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error("❌ Connection failed:", err.message));
-
+mongoose.connect(MONGO_URI).then(() => console.log("✅ MongoDB connected")).catch(err => console.error("❌ Connection failed:", err.message));
+  
 mongoose.connection.on('connected', () => console.log('Mongoose connected'));
 mongoose.connection.on('error', err => console.error('Mongoose connection error:', err));
 mongoose.connection.on('disconnected', () => console.log('Mongoose disconnected'));
 
+
+ 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin:"https://second-brain-app-frontend.vercel.app",
+  origin: 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'token']
@@ -45,7 +45,8 @@ declare global {
   }
 }
 
-// ✅ Auth middleware
+ 
+ 
 function auth(req: Request, res: Response, next: NextFunction): void {
   const token = req.headers['token'] as string | undefined;
 
@@ -57,14 +58,17 @@ function auth(req: Request, res: Response, next: NextFunction): void {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
     req.userId = decoded.id;
+ 
     next();
   } catch {
     res.status(401).json({ message: "Invalid token" });
   }
 }
 
-// ✅ Signup
+ 
+ 
 app.post('/api/v1/signup', async (req: Request, res: Response): Promise<void> => {
+ 
   try {
     const { name, email, password } = req.body;
     const existingUser = await UserModel.findOne({ email });
@@ -80,8 +84,10 @@ app.post('/api/v1/signup', async (req: Request, res: Response): Promise<void> =>
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
     res.status(201).json({ token, name: user.name });
   } catch (err: any) {
+ 
     console.error('Signup error:', err);
     res.status(500).json({ message: 'Server error during signup', error: err.message || err });
+ 
   }
 });
 
@@ -109,25 +115,33 @@ app.get('/api/v1/content', auth, async (req: Request, res: Response): Promise<vo
     const content = await ContentModel.find({ userId: req.userId });
     res.json({ content });
   } catch (err: any) {
-    res.status(500).json({ message: 'Failed to fetch content', error: err.message || err });
+    res.status(500).json({ message: 'Failed to fetch content',  erroe: err.message || err });
   }
 });
 
 // ✅ Create content
 app.post('/api/v1/content', auth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id, type, link, title } = req.body;
-    const content = await ContentModel.create({ id, type, link, title, userId: req.userId });
+ 
+    const {id, type, link, title } = req.body;
+    const content = await ContentModel.create({
+      id,
+      type,
+      link,
+      title,
+      userId: req.userId
+    });
     res.status(201).json({ message: 'Content saved', content });
-  } catch (err: any) {
-    res.status(500).json({ message: 'Failed to save content', error: err.message || err });
-  }
-});
+  } catch (err:any) {
+    res.status(500).json({ message: 'Failed to save content', error: err.message || err });  
+}});
 
 // ✅ Delete content
 app.delete("/api/v1/content/:id", auth, async (req: Request, res: Response): Promise<void> => {
   try {
+ 
     const id = parseInt(req.params.id);
+ 
 
     if (isNaN(id)) {
       res.status(400).json({ message: "Invalid numeric content ID" });
@@ -147,7 +161,7 @@ app.delete("/api/v1/content/:id", auth, async (req: Request, res: Response): Pro
   }
 });
 
-// ✅ Share content
+ 
 app.post("/api/v1/brain/share", auth, async (req: Request, res: Response): Promise<void> => {
   try {
     const { share } = req.body;
@@ -197,6 +211,7 @@ app.get("/api/v1/brain/:shareLink", async (req: Request, res: Response): Promise
     res.status(500).json({ message: "Internal Server Error", error: err?.message || err });
   }
 });
+ 
 
 // ✅ Start server
 const PORT = process.env.PORT || 3000;
