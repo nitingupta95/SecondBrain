@@ -58,7 +58,7 @@ var app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 var corsOptions = {
-    origin: "https://second-brain-woad-two.vercel.app",
+    origin: "https://second-brain-kappa-blush.vercel.app",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'token']
