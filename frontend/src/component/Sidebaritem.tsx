@@ -4,7 +4,7 @@ import * as React from 'react';
 interface SidebarItemProps {
   text: string;
   icon: ReactElement;
-  onClick?: MouseEventHandler<HTMLDivElement>; // optional click handler
+  onClick?: MouseEventHandler<HTMLDivElement>;  
 }
 
 function Sidebaritem({ text, icon, onClick }: SidebarItemProps) {

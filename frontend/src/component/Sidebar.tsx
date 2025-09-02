@@ -14,7 +14,7 @@ function Sidebar() {
   };
   return (
     <div className="h-screen bg-white border-r border-gray-200 w-64 fixed left-0 top-0">
-      <div className="flex items-center p-4">
+       <div className="flex items-center p-4">
         <img 
           className="h-8 w-8 mr-2.5" 
           src={brainIcon} 

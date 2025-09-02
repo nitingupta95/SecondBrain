@@ -53,7 +53,7 @@ function Dashboard() {
   };
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [id, setId] = useState<string>(''); // ✅ keep id as string
+  const [id, setId] = useState<string>('');  
   const [title, setTitle] = useState<string>('');
   const [link, setLink] = useState<string>('');
   const [type, setType] = useState<string>('');
@@ -87,7 +87,7 @@ function Dashboard() {
       await axios.post(
         `${BACKEND_URL}/api/v1/content`,
         {
-          id: Number(id), // ✅ convert to number here
+          id: Number(id), 
           title,
           link,
           type,
@@ -132,7 +132,7 @@ function Dashboard() {
                   <Input
                     id="id"
                     value={id}
-                    onChange={(e) => setId(e.target.value)} // ✅ keep as string
+                    onChange={(e) => setId(e.target.value)}  
                     placeholder="Enter id"
                   />
                 </div>

@@ -1,1 +1,1 @@
-export const BACKEND_URL= "https://sb-omega-opal.vercel.app";
+export const BACKEND_URL= "https://secondbrainapi2.vercel.app/";

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-// User Schema
+ 
 const Userinfo = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -10,13 +10,12 @@ const Userinfo = new Schema({
 });
 
 export const UserModel = mongoose.model("User", Userinfo);
-
-// Content Schema
+ 
 const ContentInfo = new Schema({
   id: { type: Number, required: true },
   type: {
     type: String,
-    enum: ["document", "tweet", "youtube", "link"], // Restrict values to these options
+    enum: ["document", "tweet", "youtube", "link"],  
     required: true,
   },
   link: {
@@ -36,18 +35,18 @@ const ContentInfo = new Schema({
   //   type: [String],
   //   default: [],
   // },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Match model name for `ref`
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },  
 });
 
 export const ContentModel = mongoose.model("Content", ContentInfo);
 
-// Links Schema
+ 
 const LinkInfo = new Schema(
   {
     hash: { type: String, unique: true, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Match model name for `ref`
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },  
   },
-  { collection: "links" } // Use lowercase singular name for consistency
+  { collection: "links" }  
 );
 
 export const LinkModel = mongoose.model("Link", LinkInfo);

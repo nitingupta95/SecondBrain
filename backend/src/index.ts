@@ -35,8 +35,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
-
-// ✅ Extend Express Request
+ 
 declare global {
   namespace Express {
     interface Request {
