@@ -1,1 +1,1 @@
-export const BACKEND_URL= "https://second-brain-kappa-blush.vercel.app/";
+export const BACKEND_URL= "https://secondbrainapi2.vercel.app";
